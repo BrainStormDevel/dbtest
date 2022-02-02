@@ -64,7 +64,9 @@ class Bank
 			$datamittente = $result->fetch_all(MYSQLI_ASSOC);
 			if (empty($datamittente)) {
 				$mid = (int) $this->addUser($fiscalcode2);
-				return 'Il mittente non ha credito';
+				if ($balance > 0) {
+					return 'Il mittente non ha credito';
+				}
 			}
 			else {
 				$mid = (int) $datamittente[0]['id'];
@@ -132,6 +134,9 @@ echo "<br><br>";
 echo "Effettuo transazione 1000 con destinatario test inesistente e mittente pippo";
 echo $mybank->makeTransaction('test', 'pippo""', 1000,00);
 echo "<br><br>";
+echo "Effettuo transazione 0 con destinatario test e mittente pippo";
+echo "<br><br>";
+echo $mybank->makeTransaction('test', 'pippo""', 0,00);
 echo "Effettuo transazione 600 da mittente test esistente a pippo";
 echo $mybank->makeTransaction('pippo""', 'test', 600,00);
 echo "<br><br>";
